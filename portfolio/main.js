@@ -22,6 +22,9 @@ window.onload = async function () {
       width: w, height: h, backgroundColor: 0x7a7a7a
     });
 
+    app.stage.hitArea = app.screen;
+    app.stage.interactive = true;
+
     // do pixi things
     app.renderer.resize(w, h)
 
@@ -65,6 +68,27 @@ window.onload = async function () {
     //movement event listeners
     window.addEventListener("keydown", keysdown);
     window.addEventListener("keyup", keysup);
+    //window.addEventListener("click",clicked);
+
+    app.stage.on('click', function(event) { 
+
+// need tween library 
+
+      const x = event.data.global.x;
+      const y = event.data.global.y;
+      while(character.x != x){
+        if(character.x < x){
+          character.x++;
+        }
+        if(character.x > x){
+          
+          character.x--;
+          //character.play();
+        }
+      }
+      //character.x = x;
+      //character.y = y;
+      });
 
     app.ticker.add(gameloop);
 
@@ -88,6 +112,11 @@ function keysup(e) {
   keys[keyCode] = false
 
   character.stop();
+}
+
+function clicked(e){
+  character.x  = e.data.x
+  character.y = e.data.global.y;
 }
 
 
