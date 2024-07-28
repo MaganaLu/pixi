@@ -10,7 +10,6 @@ let keysDiv;
 let character;
 let characterMovement = [];
 let animations;
-
 let loader = new PIXI.Loader();
 
 window.onload = async function () {
@@ -44,14 +43,15 @@ window.onload = async function () {
     characterMovement["walk_left"] = PIXI.AnimatedSprite.fromFrames(animations["walk_left/walk_left"]);
     characterMovement["walk_right"] = PIXI.AnimatedSprite.fromFrames(animations["walk_right/walk_right"]);
 
-    character = characterMovement["walk_down"];
+    character = PIXI.AnimatedSprite.fromFrames(animations["walk_down/walk_down"]);
     
     // configure + start animation:
-    character.animationSpeed = 1 / 6;                     // 6 fps
+    character.animationSpeed = 1/12;                     // 6 fps
     //character.position.set(150, 100); // almost bottom-left corner of the canvas
 
     // add it to the stage and render!
     app.stage.addChild(character);
+    //character.play();
     
     //app.stage.addChild(characterMovement["walk_down"], characterMovement["walk_up"], characterMovement["walk_left"], characterMovement["walk_right"] )
 
@@ -79,48 +79,63 @@ window.onload = async function () {
 
 function keysdown(e) {
   var keyCode = (window.event) ? e.which : e.keyCode;
-  console.log(keyCode);
   keys[keyCode] = true;
+  character.play();
 }
 
 function keysup(e) {
   var keyCode = (window.event) ? e.which : e.keyCode;
-  console.log(keyCode);
   keys[keyCode] = false
 
-  // stop all animation when keys are let go 
   character.stop();
 }
 
+
 function gameloop() {
-  keysDiv.innerHTML = JSON.stringify(keys)
+  keysDiv.innerHTML = JSON.stringify(keys);
+  //console.log(character.playing)
+
+
   
-  //walk up
+  //walk up 87
   if (keys['87'] && character.y > 0) {
-    character.textures = characterMovement["walk_up"].textures;
-    character.animationSpeed = 1 / 6;
-    character.visible = true;
-    character.y -= 5;
+    if(character.textures != characterMovement["walk_up"].textures){
+      character.textures = characterMovement["walk_up"].textures;
+    }
+    
     character.play();
+    character.y -= 1;
   }
-  //walk left
+  //walk left 65
   if (keys["65"] && character.x > 0) {
-    character.textures =  characterMovement["walk_left"].textures; 
-    character.x -= 5;
+    if(character.textures != characterMovement["walk_left"].textures){
+      character.textures =  characterMovement["walk_left"].textures; 
+    }
+    
     character.play();
+    character.x -= 1;
   }
-  //walk down
+  //walk down 83
   if (keys["83"] && character.y < window.innerHeight - 36) {
-    character.textures =  characterMovement["walk_down"].textures;
-    character.y += 5;
+    if(character.textures != characterMovement["walk_down"].textures){
+      character.textures =  characterMovement["walk_down"].textures;
+    }
+    
+    character.y += 1;
     character.play();
+    
   }
-  //walk right
+  //walk right 68
   if (keys["68"] && character.x < window.innerWidth - 64) {
-    character.textures =  characterMovement["walk_right"].textures;
-    character.x += 5;
+    if(character.textures != characterMovement["walk_right"].textures){
+      character.textures =  characterMovement["walk_right"].textures;
+    }
+    
     character.play();
+    character.x += 1;
   }
+
+
 }
 
 

@@ -1,0 +1,20 @@
+{"frames": {
+
+"walk_down-1.png":
+{
+	"frame": {"x":0,"y":0,"w":15,"h":29},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":15,"h":29},
+	"sourceSize": {"w":15,"h":29}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "still_down_0.png",
+	"format": "RGBA8888",
+	"size": {"w":15,"h":29},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:051d87d5cb1219e7a025c554b8e61b21:a67b0e324646af5867b77484df516c4a:d4a25dde0c83befecafce8de39ad42b8$"
+}
+}
