@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+//import {Tween} from '@tweenjs/tween.js'
 
 let w = window.innerWidth;
 let h = window.innerHeight;
@@ -47,6 +48,11 @@ window.onload = async function () {
     characterMovement["walk_right"] = PIXI.AnimatedSprite.fromFrames(animations["walk_right/walk_right"]);
 
     character = PIXI.AnimatedSprite.fromFrames(animations["walk_down/walk_down"]);
+
+    // size sprite 
+    var scaleX = 2;
+    var scaleY = 2;    
+    character.scale.set(scaleX, scaleY);
     
     // configure + start animation:
     character.animationSpeed = 1/12;                     // 6 fps
@@ -70,25 +76,15 @@ window.onload = async function () {
     window.addEventListener("keyup", keysup);
     //window.addEventListener("click",clicked);
 
-    app.stage.on('click', function(event) { 
+    app.stage.on('click', function(event) {      
 
-// need tween library 
-
+      //variables x and y for current position data
       const x = event.data.global.x;
       const y = event.data.global.y;
-      while(character.x != x){
-        if(character.x < x){
-          character.x++;
-        }
-        if(character.x > x){
-          
-          character.x--;
-          //character.play();
-        }
-      }
-      //character.x = x;
-      //character.y = y;
-      });
+
+      moveTo(character, x,y);
+
+    });
 
     app.ticker.add(gameloop);
 
@@ -100,6 +96,86 @@ window.onload = async function () {
 }
 
 //let keysDiv = document.querySelector("#keys");
+
+function moveTo(character, newX,newY)
+{
+  // initiate variables
+  let time;
+  let timeMultiplier = 3;
+
+  
+  character.play();
+  //Calculate the distance between points to determine how long should move last
+  const dx = newX - character.x;
+  const dy = newY - character.y;
+  time = Math.sqrt(dx*dx + dy*dy);
+  
+  calculateDirection(newX,newY);
+  //start character animation 
+  character.play();
+
+  //call tweenjs animations and then call movement completed function 
+  createjs.Tween.get(character.position).to({x:newX, y:newY}, timeMultiplier * time).call(movementCompleted);
+  
+
+}
+
+function calculateDirection(newX,newY){
+  let AB = {x:0,y:0, angle:0}
+  AB.x = newX - character.x
+  AB.y = newY - character.y
+  console.log(AB.x)
+  console.log(AB.y)
+
+  AB.angle = Math.atan2(AB.x, AB.y) * 180 / Math.PI;
+  if (AB.angle < 0){
+    AB.angle = AB.angle + 360
+  }
+
+  console.log("new angle", AB.angle);
+
+  if(AB.angle > 0 && AB.angle < 90){
+    //right animation // first qudrant
+    if(character.textures != characterMovement["walk_right"].textures){
+      character.textures =  characterMovement["walk_right"].textures;
+    }
+  }
+  if(AB.angle > 90 && AB.angle < 180){
+    // right animation // second quadrant
+    if(character.textures != characterMovement["walk_right"].textures){
+      character.textures =  characterMovement["walk_right"].textures;
+    }
+  }
+  if(AB.angle > 180 && AB.angle < 270){
+    //third quadrant
+    if(character.textures != characterMovement["walk_left"].textures){
+      character.textures = characterMovement["walk_left"].textures;
+    }
+  }
+  if(AB.angle > 270 && AB.angle < 360){
+    //fourth quadrant
+    if(character.textures != characterMovement["walk_left"].textures){
+      character.textures = characterMovement["walk_left"].textures;
+    }
+  }
+  if(AB.angle > 170 && AB.angle < 190){
+    if(character.textures != characterMovement["walk_up"].textures){
+      character.textures = characterMovement["walk_up"].textures;
+    }
+  }
+  if(AB.angle > 350 || AB.angle < 10){
+    if(character.textures != characterMovement["walk_down"].textures){
+      character.textures = characterMovement["walk_down"].textures;
+    }
+  }
+  
+
+}
+
+function movementCompleted(){
+character.stop();
+}
+
 
 function keysdown(e) {
   var keyCode = (window.event) ? e.which : e.keyCode;
@@ -131,6 +207,8 @@ function gameloop() {
     if(character.textures != characterMovement["walk_up"].textures){
       character.textures = characterMovement["walk_up"].textures;
     }
+
+
     
     character.play();
     character.y -= 1;
