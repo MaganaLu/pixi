@@ -1,0 +1,13 @@
+to do : 
+
+[] add colision data to sprites?  
+
+[] add top is gonna have a scene with striuctions that show what the controls are and explaiusn its a resume with art 
+
+[] botton will have a navigation bar with link to resume in plain format 
+[] setting button 
+[] mute button
+[] tiitle screen / my name
+
+ 
+
