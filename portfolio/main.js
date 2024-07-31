@@ -1,8 +1,9 @@
 import * as PIXI from 'pixi.js';
 //import {Tween} from '@tweenjs/tween.js'
 
-let w = window.innerWidth;
-let h = window.innerHeight;
+let w = window.innerWidth - 10;
+let h = window.innerHeight- 100;
+
 
 let app;
 let keys = {};
@@ -20,7 +21,7 @@ window.onload = async function () {
   (async () => {
     await app.init({
       // application options
-      width: w, height: h, backgroundColor: 0x7a7a7a
+      width: w, height: h, backgroundColor: 0xffffff
     });
 
     app.stage.hitArea = app.screen;
@@ -35,6 +36,11 @@ window.onload = async function () {
 
     // load the texture we need
     const texture = await PIXI.Assets.load('bluefront.png');
+    
+    //add world sprites
+    initWorld();
+
+
     const walkDownTexture = await PIXI.Assets.load([
         "player_movement.json"  
     ]);
@@ -95,6 +101,25 @@ window.onload = async function () {
 
 }
 
+async function initWorld(){
+   const texture = await PIXI.Assets.load('buildings/building_1.png');
+   const bunny = new PIXI.Sprite(texture);
+
+  console.log(bunny);
+
+   // Setup the position of the bunny
+   bunny.x = app.renderer.width / 2;
+   bunny.y = app.renderer.height / 2;
+
+    // size sprite 
+    var scaleX = 2;
+    var scaleY = 2;    
+    bunny.scale.set(scaleX, scaleY);
+  
+
+  app.stage.addChild(bunny);
+}
+
 //let keysDiv = document.querySelector("#keys");
 
 function moveTo(character, newX,newY)
@@ -111,6 +136,7 @@ function moveTo(character, newX,newY)
   time = Math.sqrt(dx*dx + dy*dy);
   
   calculateDirection(newX,newY);
+
   //start character animation 
   character.play();
 
@@ -120,6 +146,7 @@ function moveTo(character, newX,newY)
 
 }
 
+// calculate direction and update textures
 function calculateDirection(newX,newY){
   let AB = {x:0,y:0, angle:0}
   AB.x = newX - character.x
@@ -133,6 +160,7 @@ function calculateDirection(newX,newY){
   }
 
   console.log("new angle", AB.angle);
+  //
 
   if(AB.angle > 0 && AB.angle < 90){
     //right animation // first qudrant
@@ -189,12 +217,6 @@ function keysup(e) {
 
   character.stop();
 }
-
-function clicked(e){
-  character.x  = e.data.x
-  character.y = e.data.global.y;
-}
-
 
 function gameloop() {
   keysDiv.innerHTML = JSON.stringify(keys);
@@ -254,6 +276,6 @@ function resize() {
   // You can use the 'screen' property as the renderer visible
   // area, this is more useful than view.width/height because
   // it handles resolution
-  //player.position.set(app.screen.width / 2 , app.screen.height / 2);
+  character.position.set(app.screen.width / 2 , app.screen.height / 2);
 }
 
