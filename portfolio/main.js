@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import { CompositeTilemap } from '@pixi/tilemap';
 //import {Tween} from '@tweenjs/tween.js'
 
 let w = window.innerWidth - 10;
@@ -7,12 +8,10 @@ let h = window.innerHeight - 100;
 
 let app;
 let keys = {};
-let player;
 let keysDiv;
 let character;
 let characterMovement = [];
 let animations;
-let loader = new PIXI.Loader();
 let world;
 let charMoveDirection;
 
@@ -30,74 +29,30 @@ window.onload = async function () {
     app.stage.hitArea = app.screen;
     app.stage.interactive = true;
 
-    world = new PIXI.Container();
-
-    world.height = 4000;
-
-    world.width = 4000;
-
-    world.x = window.innerWidth / 2;
-
-    world.y = window.innerHeight / 2;
-
-    world.pivot.x = world.width / 2;
-
-    world.pivot.y = world.height / 2;
-
-    // Move the camera to the center
-    // fix mapping on first move for sprites
-    // seperate functions
-    /*
-      initWorld()
-      mapInput()
-      detectInput()
-      mapTexture()
-
-    */
-
-
-    app.renderer.resize(w, h)
-
-    // The application will create a canvas element for you that you
-    // can then insert into the DOM
+    // insert canvas into the DOM
     document.body.appendChild(app.canvas);
 
+
+    world = new PIXI.Container();
+    world.height = 4000;
+    world.width = 4000;
+    world.x = window.innerWidth / 2;
+    world.y = window.innerHeight / 2;
+    world.pivot.x = world.width / 2;
+    world.pivot.y = world.height / 2;
+
+    //init tilemap for game map  
+    await initMap();
+
+
+
     //add world sprites
-    initWorld();
-
-
-    const walkDownTexture = await PIXI.Assets.load([
-      "player_movement.json"
-    ]);
-
-    animations = PIXI.Assets.cache.get('player_movement.json').data.animations;
-
-    //character = PIXI.AnimatedSprite.fromFrames(animations["walk_down/walk_down"]);
-    characterMovement["walk_down"] = PIXI.AnimatedSprite.fromFrames(animations["walk_down/walk_down"]);
-    characterMovement["walk_up"] = PIXI.AnimatedSprite.fromFrames(animations["walk_up/walk_up"]);
-    characterMovement["walk_left"] = PIXI.AnimatedSprite.fromFrames(animations["walk_left/walk_left"]);
-    characterMovement["walk_right"] = PIXI.AnimatedSprite.fromFrames(animations["walk_right/walk_right"]);
-
-    character = PIXI.AnimatedSprite.fromFrames(animations["walk_down/walk_down"]);
-
-    // size sprite 
-    var scaleX = 2;
-    var scaleY = 2;
-    character.scale.set(scaleX, scaleY);
-
-    // configure + start animation:
-    character.animationSpeed = 1 / 12;                     // 6 fps
-    //character.position.set(150, 100); // almost bottom-left corner of the canvas
-    //app.stage.children[0].textures = this.PIXI.textures.from("map.jpg");
-    //tmp
-    world.addChild(character);
+    await initSprites();
 
     // add it to the stage and render!
     app.stage.addChild(world);
 
-    // Setup the position of the bunny
-    character.x = world.width / 2;
-    character.y = world.height / 2;
+
 
     // Listen for window resize events
     window.addEventListener('resize', resize);
@@ -105,8 +60,36 @@ window.onload = async function () {
     //movement event listeners
     window.addEventListener("keydown", keysdown);
     window.addEventListener("keyup", keysup);
-    //window.addEventListener("click",clicked);
 
+    //tickers
+    app.renderer.resize(w, h);
+    app.ticker.add(gameloop);
+
+    //move screen based on player movement
+    /*
+    app.ticker.add((delta) => {
+      let distance = 1;
+      if (charMoveDirection == "left") { //Get player input however you please
+        character.x -= distance;
+        world.pivot.x = character.x;
+        //app.stage.position.x = app.renderer.width/2;
+        //app.stage.position.y = app.renderer.height/2
+      }
+      else if (charMoveDirection == "right") {
+        character.x += distance;
+        world.pivot.x = character.x;
+        //app.stage.position.x = app.renderer.width/2;
+        //app.stage.position.y = app.renderer.height/2
+      }
+    });
+    */
+
+    //controls
+    keysDiv = document.querySelector("#keys")
+    await inputsMap();
+
+    //event handler for clicking movement might implement later idk 
+    /*
     app.stage.on('click', function (event) {
 
       //variables x and y for current position data
@@ -118,84 +101,7 @@ window.onload = async function () {
       moveTo(character, x, y);
 
     });
-
-    app.ticker.add(gameloop);
-
-    app.ticker.add((delta) => {
-
-      let distance = 1;
-      if (charMoveDirection == "left") { //Get player input haowever you please
-        console.log("in here 1")
-        console.log("char: ", character.position);
-        console.log("world: ", world.position);
-        character.x -= distance;
-        world.pivot.x = character.x;
-        //app.stage.position.x = app.renderer.width/2;
-        //app.stage.position.y = app.renderer.height/2
-      }
-      else if (charMoveDirection == "right") {
-        console.log("in here 2")
-        console.log("char: ", character.position);
-        console.log("world: ", world.position);
-        character.x += distance;
-        world.pivot.x = character.x;
-        //app.stage.position.x = app.renderer.width/2;
-        //app.stage.position.y = app.renderer.height/2
-      }
-    });
-
-    keysDiv = document.querySelector("#keys")
-    let upBtn = document.getElementById("upBtn");
-    //upBtn.addEventListener("mousedown", test);
-    upBtn.addEventListener('mousedown', () => {
-      let interval = setInterval(() => {
-        character.y--;
-        charMoveDirection = "up";
-      }, 50);
-      upBtn.addEventListener('mouseup', () => {
-        clearInterval(interval);
-        charMoveDirection = "";
-      });
-    });
-
-    let downBtn = document.getElementById("downBtn");
-    //upBtn.addEventListener("mousedown", test);
-    downBtn.addEventListener('mousedown', () => {
-      let interval = setInterval(() => {
-        character.y++;
-        charMoveDirection = "down";
-      }, 50);
-      downBtn.addEventListener('mouseup', () => {
-        clearInterval(interval);
-        charMoveDirection = "";
-      });
-    });
-
-    let leftBtn = document.getElementById("leftBtn");
-    //upBtn.addEventListener("mousedown", test);
-    leftBtn.addEventListener('mousedown', () => {
-      let interval = setInterval(() => {
-        character.x = character.x - 10;
-        charMoveDirection = "left";
-      }, 50);
-      leftBtn.addEventListener('mouseup', () => {
-        clearInterval(interval);
-        charMoveDirection = "";
-      });
-    });
-
-    let rightBtn = document.getElementById("rightBtn");
-    //upBtn.addEventListener("mousedown", test);
-    rightBtn.addEventListener('mousedown', () => {
-      let interval = setInterval(() => {
-        character.x = character.x + 10;
-        charMoveDirection = "right";
-      }, 50);
-      rightBtn.addEventListener('mouseup', () => {
-        clearInterval(interval);
-        charMoveDirection = "";
-      });
-    });
+    */
 
   })()
 
@@ -203,20 +109,114 @@ window.onload = async function () {
 
 }
 
+async function inputsMap(params) {
+  let upBtn = document.getElementById("upBtn");
+  //upBtn.addEventListener("mousedown", test);
+  upBtn.addEventListener('mousedown', () => {
+    let interval = setInterval(() => {
+      character.y--;
+      charMoveDirection = "up";
+    }, 50);
+    upBtn.addEventListener('mouseup', () => {
+      clearInterval(interval);
+      charMoveDirection = "";
+    });
+  });
 
-async function initWorld() {
-  const texture = await PIXI.Assets.load('buildings/building_1.png');
-  const building = new PIXI.Sprite(texture);
+  let downBtn = document.getElementById("downBtn");
+  //upBtn.addEventListener("mousedown", test);
+  downBtn.addEventListener('mousedown', () => {
+    let interval = setInterval(() => {
+      character.y++;
+      charMoveDirection = "down";
+    }, 50);
+    downBtn.addEventListener('mouseup', () => {
+      clearInterval(interval);
+      charMoveDirection = "";
+    });
+  });
 
-  console.log(building);
+  let leftBtn = document.getElementById("leftBtn");
+  //upBtn.addEventListener("mousedown", test);
+  leftBtn.addEventListener('mousedown', () => {
+    let interval = setInterval(() => {
+      if (character.x > 0) {
+        character.x = character.x - 10;
+        charMoveDirection = "left";
+      }
+    }, 50);
+    leftBtn.addEventListener('mouseup', () => {
+      clearInterval(interval);
+      charMoveDirection = "";
+    });
+  });
 
-  // Setup the position of the building
-  building.x = -1000;
-  building.y = 0;
+  let rightBtn = document.getElementById("rightBtn");
+  //upBtn.addEventListener("mousedown", test);
+  rightBtn.addEventListener('mousedown', () => {
+    let interval = setInterval(() => {
+      character.x = character.x + 10;
+      charMoveDirection = "right";
+    }, 50);
+    rightBtn.addEventListener('mouseup', () => {
+      clearInterval(interval);
+      charMoveDirection = "";
+    });
+  });
+}
+
+async function initMap() {
+  await PIXI.Assets.load(['buildings.json']).then(() => {
+    const tilemap = new CompositeTilemap();
+
+    // Render your first tile at (0, 0)!
+    tilemap.tile('building_3.png', 0, 0);
+
+    world.addChild(tilemap);
+  });
+}
+
+async function initSprites() {
+
+  await PIXI.Assets.load(["player_movement.json"]);
+  // player 
+  animations = PIXI.Assets.cache.get('player_movement.json').data.animations;
+
+  characterMovement["walk_down"] = PIXI.AnimatedSprite.fromFrames(animations["walk_down/walk_down"]);
+  characterMovement["walk_up"] = PIXI.AnimatedSprite.fromFrames(animations["walk_up/walk_up"]);
+  characterMovement["walk_left"] = PIXI.AnimatedSprite.fromFrames(animations["walk_left/walk_left"]);
+  characterMovement["walk_right"] = PIXI.AnimatedSprite.fromFrames(animations["walk_right/walk_right"]);
+
+  character = PIXI.AnimatedSprite.fromFrames(animations["walk_down/walk_down"]);
 
   // size sprite 
   var scaleX = 2;
   var scaleY = 2;
+  character.scale.set(scaleX, scaleY);
+
+  // configure + start animation:
+  character.animationSpeed = 1 / 12;                     // 6 fps
+  //character.position.set(150, 100); // almost bottom-left corner of the canvas
+  //app.stage.children[0].textures = PIXI.textures.from("map.jpg");
+  //tmp
+
+  // Setup the position of the bunny
+  character.x = world.width / 2;
+  character.y = world.height / 2;
+
+  world.addChild(character);
+
+  //buildings 
+  const texture = await PIXI.Assets.load('buildings/building_1.png');
+  const building = new PIXI.Sprite(texture);
+
+  // Setup the position of the building
+  building.x = 0;
+  building.y = 0;
+
+  // size sprite 
+  var scaleX = 1;
+  var scaleY = 1;
   building.scale.set(scaleX, scaleY);
 
 
@@ -329,13 +329,19 @@ function gameloop() {
   //console.log(character.playing)
 
   //camera logic 
+  let distance = 1;
+  if (charMoveDirection == "left") { 
+    character.x -= distance;
+    world.pivot.x = character.x;
+  }
+  else if (charMoveDirection == "right") {
+    character.x += distance;
+    world.pivot.x = character.x;
+  }
 
-
-
-
-  // movement logic 
+  // movement logic for keyboard
   //walk up 87
-  if (keys['87'] && character.y > 0) {
+  if ((charMoveDirection == "up"|| keys['87']) && character.y > 0) {
     if (character.textures != characterMovement["walk_up"].textures) {
       character.textures = characterMovement["walk_up"].textures;
     }
@@ -360,7 +366,7 @@ function gameloop() {
 
   }
   //walk right 68
-  if (keys["68"] && character.x < window.innerWidth - 64) {
+  if ((charMoveDirection == "right" || keys["68"]) && character.x < window.innerWidth - 64) {
     if (character.textures != characterMovement["walk_right"].textures) {
       character.textures = characterMovement["walk_right"].textures;
     }
@@ -380,7 +386,8 @@ function resize() {
   // You can use the 'screen' property as the renderer visible
   // area, this is more useful than view.width/height because
   // it handles resolution
-  //character.position.set(app.screen.width / 2 , app.screen.height / 2);
+  character.x = world.width / 2;
+  character.y = world.height / 2;
 
 }
 
