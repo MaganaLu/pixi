@@ -120,6 +120,7 @@ async function inputsMap(params) {
     upBtn.addEventListener('mouseup', () => {
       clearInterval(interval);
       charMoveDirection = "";
+      character.stop();
     });
   });
 
@@ -133,6 +134,7 @@ async function inputsMap(params) {
     downBtn.addEventListener('mouseup', () => {
       clearInterval(interval);
       charMoveDirection = "";
+      character.stop();
     });
   });
 
@@ -141,13 +143,15 @@ async function inputsMap(params) {
   leftBtn.addEventListener('mousedown', () => {
     let interval = setInterval(() => {
       if (character.x > 0) {
-        character.x = character.x - 10;
+        character.x = character.x - 1;
         charMoveDirection = "left";
+        character.stop();
       }
     }, 50);
     leftBtn.addEventListener('mouseup', () => {
       clearInterval(interval);
       charMoveDirection = "";
+      character.stop();
     });
   });
 
@@ -155,12 +159,13 @@ async function inputsMap(params) {
   //upBtn.addEventListener("mousedown", test);
   rightBtn.addEventListener('mousedown', () => {
     let interval = setInterval(() => {
-      character.x = character.x + 10;
+      character.x = character.x + 1;
       charMoveDirection = "right";
     }, 50);
     rightBtn.addEventListener('mouseup', () => {
       clearInterval(interval);
       charMoveDirection = "";
+      character.stop();
     });
   });
 }
@@ -320,7 +325,7 @@ function keysdown(e) {
 function keysup(e) {
   var keyCode = (window.event) ? e.which : e.keyCode;
   keys[keyCode] = false
-
+  charMoveDirection = "";
   character.stop();
 }
 
@@ -328,9 +333,23 @@ function gameloop() {
   keysDiv.innerHTML = JSON.stringify(keys);
   //console.log(character.playing)
 
+  //check keyboard key press input to assign charMoveDirection
+  if(keys['87']){
+    charMoveDirection = "up";
+  }
+  else if(keys["65"]){
+    charMoveDirection = "left";
+  }
+  else if(keys["83"]){
+    charMoveDirection = "down";
+  }
+  else if(keys["68"]){
+    charMoveDirection = "right";
+  }
+
   //camera logic 
   let distance = 1;
-  if (charMoveDirection == "left") { 
+  if (charMoveDirection == "left") {
     character.x -= distance;
     world.pivot.x = character.x;
   }
@@ -338,10 +357,18 @@ function gameloop() {
     character.x += distance;
     world.pivot.x = character.x;
   }
+  else if (charMoveDirection == "up") {
+    character.y -= distance;
+    world.pivot.y = character.y;
+  }
+  else if (charMoveDirection == "down") {
+    character.y += distance;
+    world.pivot.y = character.y;
+  }
 
   // movement logic for keyboard
   //walk up 87
-  if ((charMoveDirection == "up"|| keys['87']) && character.y > 0) {
+  if ((charMoveDirection == "up" || keys['87']) && character.y > 0) {
     if (character.textures != characterMovement["walk_up"].textures) {
       character.textures = characterMovement["walk_up"].textures;
     }
@@ -349,7 +376,7 @@ function gameloop() {
     character.y -= 1;
   }
   //walk left 65
-  if (keys["65"] && character.x > 0) {
+  if ((charMoveDirection == "left" || keys["65"]) && character.x > 0) {
     if (character.textures != characterMovement["walk_left"].textures) {
       character.textures = characterMovement["walk_left"].textures;
     }
@@ -357,7 +384,7 @@ function gameloop() {
     character.x -= 1;
   }
   //walk down 83
-  if (keys["83"] && character.y < window.innerHeight - 36) {
+  if ((charMoveDirection == "down" || keys["83"]) && character.y < window.innerHeight - 36) {
     if (character.textures != characterMovement["walk_down"].textures) {
       character.textures = characterMovement["walk_down"].textures;
     }
