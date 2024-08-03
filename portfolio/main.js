@@ -211,6 +211,9 @@ async function initSprites() {
 
   world.addChild(character);
 
+  //delete
+  console.log(character.bounds)
+
   //buildings 
   const texture = await PIXI.Assets.load('buildings/building_1.png');
   const building = new PIXI.Sprite(texture);
@@ -226,6 +229,7 @@ async function initSprites() {
 
 
   world.addChild(building);
+  console.log("building: ",building.bounds)
 }
 
 //let keysDiv = document.querySelector("#keys");
