@@ -14,6 +14,7 @@ let characterMovement = [];
 let animations;
 let world;
 let charMoveDirection;
+let building;
 
 window.onload = async function () {
 
@@ -216,7 +217,7 @@ async function initSprites() {
 
   //buildings 
   const texture = await PIXI.Assets.load('buildings/building_1.png');
-  const building = new PIXI.Sprite(texture);
+  building = new PIXI.Sprite(texture);
 
   // Setup the position of the building
   building.x = 0;
@@ -255,6 +256,13 @@ function moveTo(character, newX, newY) {
   createjs.Tween.get(character.position).to({ x: newX, y: newY }, timeMultiplier * time).call(movementCompleted);
 
 
+}
+
+function boxesIntersect(a, b)
+{
+  var ab = a.getBounds();
+  var bb = b.getBounds();
+  return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
 }
 
 // calculate direction and update textures
@@ -336,7 +344,10 @@ function keysup(e) {
 function gameloop() {
   keysDiv.innerHTML = JSON.stringify(keys);
   //console.log(character.playing)
-
+  // test 
+  let tmp = boxesIntersect(character, building);
+  
+  //text
   //check keyboard key press input to assign charMoveDirection
   if(keys['87']){
     charMoveDirection = "up";
