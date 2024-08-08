@@ -1,6 +1,11 @@
 to do : 
 
-[] add colision data to sprites?  
+[X] add colision data to sprites?  donezo 
+    [X] see what edge sprite runs into 
+    [X] return sprite by X number of pixels 
+
+[] add sprites to edges so player cannot cross 
+[] 
 
 [] add top is gonna have a scene with striuctions that show what the controls are and explaiusn its a resume with art 
 

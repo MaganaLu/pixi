@@ -15,6 +15,7 @@ let animations;
 let world;
 let charMoveDirection;
 let building;
+let charCollision;
 
 window.onload = async function () {
 
@@ -146,9 +147,9 @@ async function inputsMap(params) {
       if (character.x > 0) {
         character.x = character.x - 1;
         charMoveDirection = "left";
-        character.stop();
+        //character.stop();
       }
-    }, 50);
+    }, 1);
     leftBtn.addEventListener('mouseup', () => {
       clearInterval(interval);
       charMoveDirection = "";
@@ -160,9 +161,11 @@ async function inputsMap(params) {
   //upBtn.addEventListener("mousedown", test);
   rightBtn.addEventListener('mousedown', () => {
     let interval = setInterval(() => {
+      if (character.x < world.width) {
       character.x = character.x + 1;
       charMoveDirection = "right";
-    }, 50);
+      }
+    }, 1);
     rightBtn.addEventListener('mouseup', () => {
       clearInterval(interval);
       charMoveDirection = "";
@@ -220,7 +223,7 @@ async function initSprites() {
   building = new PIXI.Sprite(texture);
 
   // Setup the position of the building
-  building.x = 0;
+  building.x = 200;
   building.y = 0;
 
   // size sprite 
@@ -230,7 +233,7 @@ async function initSprites() {
 
 
   world.addChild(building);
-  console.log("building: ",building.bounds)
+  console.log("building: ", building.bounds)
 }
 
 //let keysDiv = document.querySelector("#keys");
@@ -258,11 +261,92 @@ function moveTo(character, newX, newY) {
 
 }
 
-function boxesIntersect(a, b)
-{
+// returns boolean if intersecetd
+function boxesIntersect(a, b) {
   var ab = a.getBounds();
   var bb = b.getBounds();
+
+  if(ab.x + ab.width > bb.x){
+    console.log("ab.x + ab.width > bb.x", ab.x + ab.width > bb.x)
+  }
+  //player x coordinate is less than the
+  if(ab.x < bb.x + bb.width){
+    console.log("ab.x < bb.x + bb.width", ab.x < bb.x + bb.width)
+  }
+  if(ab.y + ab.height > bb.y){
+    console.log("ab.y + ab.height > bb.y", ab.y + ab.height > bb.y)
+  }
+  if(ab.y < bb.y + bb.height){
+    console.log("ab.y < bb.y + bb.height", ab.y < bb.y + bb.height)
+  }
+  //console.log("ab.x + ab.width > bb.x: ",ab.x + ab.width > bb.x)
+  //console.log("ab.x < bb.x + bb.width: ",ab.x < bb.x + bb.width)
+  //console.log("ab.y + ab.height > bb.y : ",ab.y + ab.height > bb.y )
+  //console.log("ab.y < bb.y + bb.height: ",ab.y < bb.y + bb.height)
   return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
+}
+
+// return true if the 2 rectangles are colliding
+
+function RectsColliding(obj1,obj2){
+  console.log("!(obj1.x > obj2.x + obj2.width || obj1.x + obj1.width < obj2.x || obj1.y > obj2.y + obj2.height || obj1.y + obj1.height < obj2.y): ",!(obj1.x > obj2.x + obj2.width || obj1.x + obj1.width < obj2.x || obj1.y > obj2.y + obj2.height || obj1.y + obj1.height < obj2.y))
+  return !(obj1.x > obj2.x + obj2.width || obj1.x + obj1.width < obj2.x || obj1.y > obj2.y + obj2.height || obj1.y + obj1.height < obj2.y);
+}
+
+function HandleCollision(){
+  charCollision = RectsColliding(character, building);
+  if (charCollision) {
+    var characterHalfW = character.width / 2
+    var characterHalfH = character.height / 2
+    var buildingHalfW = building.width / 2
+    var buildingHalfH = building.height / 2
+    var characterCenterX = character.x + character.width / 2
+    var characterCenterY = character.y + character.height / 2
+    var buildingCenterX = building.x + building.width / 2
+    var buildingCenterY = building.y + building.height / 2
+
+    // Calculate the distance between centers
+    var diffX = characterCenterX - buildingCenterX
+    var diffY = characterCenterY - buildingCenterY
+
+    // Calculate the minimum distance to separate along X and Y
+    var minXDist = characterHalfW + buildingHalfW
+    var minYDist = characterHalfH + buildingHalfH
+
+    // Calculate the depth of collision for both the X and Y axis
+    var depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX
+    var depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY
+
+    // distance to move char back 
+    let pushBackDist = 2;
+
+    // Now that you have the depth, you can pick the smaller depth and move
+    // along that axis.
+    if (depthX != 0 && depthY != 0) {
+      if (Math.abs(depthX) < Math.abs(depthY)) {
+        // Collision along the X axis. React accordingly
+        if (depthX > 0) {
+          console.log("left side collision");
+          character.x = character.x + pushBackDist;
+        } else {
+          console.log("right side collision");
+          character.x = character.x - pushBackDist;
+        }
+      } else {
+        // Collision along the Y axis.
+        if (depthY > 0) {
+          console.log("top side collision");
+          character.y = character.y + pushBackDist;
+        } else {
+          console.log("bottom side collision");
+          character.y = character.y - pushBackDist;
+        }
+      }
+    }
+  } else {
+    console.log("No collision");
+  }
+  console.log("charCollision: ",charCollision)
 }
 
 // calculate direction and update textures
@@ -344,78 +428,82 @@ function keysup(e) {
 function gameloop() {
   keysDiv.innerHTML = JSON.stringify(keys);
   //console.log(character.playing)
+
   // test 
-  let tmp = boxesIntersect(character, building);
-  
+  //charCollision = boxesIntersect(character, building);
+  //charCollision = RectsColliding(character, building);
+  HandleCollision();
+
   //text
   //check keyboard key press input to assign charMoveDirection
-  if(keys['87']){
+  if (keys['87']) {
     charMoveDirection = "up";
   }
-  else if(keys["65"]){
+  else if (keys["65"]) {
     charMoveDirection = "left";
   }
-  else if(keys["83"]){
+  else if (keys["83"]) {
     charMoveDirection = "down";
   }
-  else if(keys["68"]){
+  else if (keys["68"]) {
     charMoveDirection = "right";
   }
 
-  //camera logic 
-  let distance = 1;
-  if (charMoveDirection == "left") {
-    character.x -= distance;
-    world.pivot.x = character.x;
-  }
-  else if (charMoveDirection == "right") {
-    character.x += distance;
-    world.pivot.x = character.x;
-  }
-  else if (charMoveDirection == "up") {
-    character.y -= distance;
-    world.pivot.y = character.y;
-  }
-  else if (charMoveDirection == "down") {
-    character.y += distance;
-    world.pivot.y = character.y;
-  }
+  if (!charCollision) {
+    //camera logic 
+    let distance = 1;
+    if (charMoveDirection == "left") {
+      character.x -= distance;
+      world.pivot.x = character.x;
+    }
+    else if (charMoveDirection == "right") {
+      character.x += distance;
+      world.pivot.x = character.x;
+    }
+    else if (charMoveDirection == "up") {
+      character.y -= distance;
+      world.pivot.y = character.y;
+    }
+    else if (charMoveDirection == "down") {
+      character.y += distance;
+      world.pivot.y = character.y;
+    }
 
-  // movement logic for keyboard
-  //walk up 87
-  if ((charMoveDirection == "up" || keys['87']) && character.y > 0) {
-    if (character.textures != characterMovement["walk_up"].textures) {
-      character.textures = characterMovement["walk_up"].textures;
+    // movement logic for keyboard
+    //walk up 87
+    if ((charMoveDirection == "up" || keys['87']) && character.y > 0) {
+      if (character.textures != characterMovement["walk_up"].textures) {
+        character.textures = characterMovement["walk_up"].textures;
+      }
+      character.play();
+      character.y -= 1;
     }
-    character.play();
-    character.y -= 1;
-  }
-  //walk left 65
-  if ((charMoveDirection == "left" || keys["65"]) && character.x > 0) {
-    if (character.textures != characterMovement["walk_left"].textures) {
-      character.textures = characterMovement["walk_left"].textures;
+    //walk left 65
+    if ((charMoveDirection == "left" || keys["65"]) && character.x > 0) {
+      if (character.textures != characterMovement["walk_left"].textures) {
+        character.textures = characterMovement["walk_left"].textures;
+      }
+      character.play();
+      character.x -= 1;
     }
-    character.play();
-    character.x -= 1;
-  }
-  //walk down 83
-  if ((charMoveDirection == "down" || keys["83"]) && character.y < window.innerHeight - 36) {
-    if (character.textures != characterMovement["walk_down"].textures) {
-      character.textures = characterMovement["walk_down"].textures;
-    }
-    character.y += 1;
-    character.play();
+    //walk down 83
+    if ((charMoveDirection == "down" || keys["83"]) && character.y < window.innerHeight - 36) {
+      if (character.textures != characterMovement["walk_down"].textures) {
+        character.textures = characterMovement["walk_down"].textures;
+      }
+      character.y += 1;
+      character.play();
 
-  }
-  //walk right 68
-  if ((charMoveDirection == "right" || keys["68"]) && character.x < window.innerWidth - 64) {
-    if (character.textures != characterMovement["walk_right"].textures) {
-      character.textures = characterMovement["walk_right"].textures;
     }
-    character.play();
-    character.x += 1;
+    //walk right 68
+    if ((charMoveDirection == "right" || keys["68"]) && character.x < window.innerWidth - 64) {
+      if (character.textures != characterMovement["walk_right"].textures) {
+        character.textures = characterMovement["walk_right"].textures;
+      }
+      character.play();
+      character.x += 1;
+    }
   }
-
 
 }
 
