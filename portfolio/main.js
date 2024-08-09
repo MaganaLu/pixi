@@ -142,6 +142,7 @@ async function inputsMap(params) {
 
   let leftBtn = document.getElementById("leftBtn");
   //upBtn.addEventListener("mousedown", test);
+  /*
   leftBtn.addEventListener('mousedown', () => {
     let interval = setInterval(() => {
       if (character.x > 0) {
@@ -156,9 +157,27 @@ async function inputsMap(params) {
       character.stop();
     });
   });
+  */
+
+  leftBtn.addEventListener('mousedown', () => {
+    let interval = setInterval(() => {
+      if (character.x > 0) {
+        keys['65'] = true;
+        charMoveDirection = "left";
+        //character.stop();
+      }
+    }, 50);
+    leftBtn.addEventListener('mouseup', () => {
+      clearInterval(interval);
+      charMoveDirection = "";
+      keys['65'] = false;
+      character.stop();
+    });
+  });
 
   let rightBtn = document.getElementById("rightBtn");
   //upBtn.addEventListener("mousedown", test);
+  /*
   rightBtn.addEventListener('mousedown', () => {
     let interval = setInterval(() => {
       if (character.x < world.width) {
@@ -172,6 +191,22 @@ async function inputsMap(params) {
       character.stop();
     });
   });
+  */
+  rightBtn.addEventListener('mousedown', () => {
+    let interval = setInterval(() => {
+      if (character.x < world.width) {
+      keys['68'] = true;
+      charMoveDirection = "right";
+      }
+    }, 1);
+    rightBtn.addEventListener('mouseup', () => {
+      clearInterval(interval);
+      keys['68'] = false;
+      charMoveDirection = "";
+      character.stop();
+    });
+  });
+
 }
 
 async function initMap() {
@@ -250,7 +285,7 @@ function moveTo(character, newX, newY) {
   const dy = newY;
   time = Math.sqrt(dx * dx + dy * dy);
 
-  calculateDirection(newX, newY);
+  calculateDirection(newX, newY);d
 
   //start character animation 
   character.play();
@@ -293,8 +328,8 @@ function RectsColliding(obj1,obj2){
 }
 
 function HandleCollision(){
-  charCollision = RectsColliding(character, building);
-  if (charCollision) {
+  //charCollision = RectsColliding(character, building);
+  if (RectsColliding(character, building)) {
     var characterHalfW = character.width / 2
     var characterHalfH = character.height / 2
     var buildingHalfW = building.width / 2
@@ -317,7 +352,7 @@ function HandleCollision(){
     var depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY
 
     // distance to move char back 
-    let pushBackDist = 2;
+    let pushBackDist = 5;
 
     // Now that you have the depth, you can pick the smaller depth and move
     // along that axis.
