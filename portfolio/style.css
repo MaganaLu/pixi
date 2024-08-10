@@ -1,6 +1,15 @@
 
 
 /*test*/
+*{ user-select: none; } 
+
+.arrow-top {
+  border-bottom: none !important;
+  box-shadow: inset 0 4px #fff;
+  left: 50%;
+  margin-left: -15px;
+  top: 13.5px;
+ }
 
 /* The Modal (background) */
 .modal {

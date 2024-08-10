@@ -17,6 +17,7 @@ let charMoveDirection;
 let building;
 let charCollision;
 let modal;
+let modalBody;
 
 
 window.onload = async function () {
@@ -35,6 +36,9 @@ window.onload = async function () {
 
     // insert canvas into the DOM
     document.body.appendChild(app.canvas);
+
+    const body = document.getElementById("body");
+    body.insertBefore(app.canvas, body.children[0]);
 
 
     world = new PIXI.Container();
@@ -113,6 +117,7 @@ window.onload = async function () {
 function initModals() {
   // Get the modal
   modal = document.getElementById("myModal");
+  modalBody = document.getElementById("modalBody")
 
   // Get the button that opens the modal
   var btn = document.getElementById("myBtn");
@@ -142,62 +147,49 @@ function initModals() {
 ////////
 
 async function inputsMap(params) {
+
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+  }, false);
+
   let upBtn = document.getElementById("upBtn");
-  //upBtn.addEventListener("mousedown", test);
-  upBtn.addEventListener('mousedown', () => {
+  upBtn.addEventListener('touchstart', (e) => {
     let interval = setInterval(() => {
-      character.y--;
+      keys['87'] = true;
       charMoveDirection = "up";
-    }, 50);
-    upBtn.addEventListener('mouseup', () => {
+    }, 1);
+    upBtn.addEventListener('touchend', () => {
       clearInterval(interval);
       charMoveDirection = "";
+      keys['87'] = false;
       character.stop();
     });
   });
 
+
   let downBtn = document.getElementById("downBtn");
-  //upBtn.addEventListener("mousedown", test);
-  downBtn.addEventListener('mousedown', () => {
+  downBtn.addEventListener('touchstart', () => {
     let interval = setInterval(() => {
-      character.y++;
+      keys['83'] = true;
       charMoveDirection = "down";
     }, 50);
-    downBtn.addEventListener('mouseup', () => {
+    downBtn.addEventListener('touchend', () => {
       clearInterval(interval);
       charMoveDirection = "";
+      keys['83'] = false;
       character.stop();
     });
   });
 
   let leftBtn = document.getElementById("leftBtn");
-  //upBtn.addEventListener("mousedown", test);
-  /*
-  leftBtn.addEventListener('mousedown', () => {
-    let interval = setInterval(() => {
-      if (character.x > 0) {
-        character.x = character.x - 1;
-        charMoveDirection = "left";
-        //character.stop();
-      }
-    }, 1);
-    leftBtn.addEventListener('mouseup', () => {
-      clearInterval(interval);
-      charMoveDirection = "";
-      character.stop();
-    });
-  });
-  */
-
-  leftBtn.addEventListener('mousedown', () => {
+  leftBtn.addEventListener('touchstart', () => {
     let interval = setInterval(() => {
       if (character.x > 0) {
         keys['65'] = true;
         charMoveDirection = "left";
-        //character.stop();
       }
-    }, 50);
-    leftBtn.addEventListener('mouseup', () => {
+    }, 1);
+    leftBtn.addEventListener('touchend', () => {
       clearInterval(interval);
       charMoveDirection = "";
       keys['65'] = false;
@@ -206,30 +198,14 @@ async function inputsMap(params) {
   });
 
   let rightBtn = document.getElementById("rightBtn");
-  //upBtn.addEventListener("mousedown", test);
-  /*
-  rightBtn.addEventListener('mousedown', () => {
-    let interval = setInterval(() => {
-      if (character.x < world.width) {
-      character.x = character.x + 1;
-      charMoveDirection = "right";
-      }
-    }, 1);
-    rightBtn.addEventListener('mouseup', () => {
-      clearInterval(interval);
-      charMoveDirection = "";
-      character.stop();
-    });
-  });
-  */
-  rightBtn.addEventListener('mousedown', () => {
+  rightBtn.addEventListener('touchstart', () => {
     let interval = setInterval(() => {
       if (character.x < world.width) {
         keys['68'] = true;
         charMoveDirection = "right";
       }
     }, 1);
-    rightBtn.addEventListener('mouseup', () => {
+    rightBtn.addEventListener('touchend', () => {
       clearInterval(interval);
       keys['68'] = false;
       charMoveDirection = "";
@@ -384,6 +360,8 @@ function HandleCollision() {
     // distance to move char back 
     let pushBackDist = 5;
 
+
+
     // Now that you have the depth, you can pick the smaller depth and move
     // along that axis.
     if (depthX != 0 && depthY != 0) {
@@ -399,9 +377,18 @@ function HandleCollision() {
       } else {
         // Collision along the Y axis.
         if (depthY > 0) {
+          console.log("in here keys 87 is", keys['87']);
+          // 87,65,83,68
+
+          //stop movement 
+
+
           //console.log("top side collision");
+          //modalBody.innerText = "wowza";
           modal.style.display = "block";
           character.y = character.y + pushBackDist;
+          console.log("in here keys 87 is", keys['87']);
+
         } else {
           //console.log("bottom side collision");
           character.y = character.y - pushBackDist;
@@ -481,7 +468,7 @@ function movementCompleted() {
 function keysdown(e) {
   var keyCode = (window.event) ? e.which : e.keyCode;
   keys[keyCode] = true;
-  character.play();
+  //character.play();
 }
 
 function keysup(e) {
