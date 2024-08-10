@@ -1,20 +1,50 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <div id="keys"></div>
-    
-    <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
-    <script type="module" src="/main.js"></script>
-    <button type="button" id="upBtn">Up</button> 
-    <button type="button" id="downBtn">down</button> 
-    <button type="button" id="leftBtn">left</button> 
-    <button type="button" id="rightBtn">right</button> 
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite App</title>
+</head>
+
+<body>
+  <link rel="stylesheet" href="style.css">
+
+  <div id="app"></div>
+  <div id="keys"></div>
+
+  <!-- -->
+  <button id="myBtn">Open Modal</button>
+
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
+  
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2>Modal Header</h2>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the Modal Body</p>
+        <p>Some other text...</p>
+      </div>
+      <div class="modal-footer">
+        <h3>Modal Footer</h3>
+      </div>
+    </div>
+  
+  </div>
+  
+  <!-- -->
+
+  <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
+  <script type="module" src="/main.js"></script>
+  <button type="button" id="upBtn">Up</button>
+  <button type="button" id="downBtn">down</button>
+  <button type="button" id="leftBtn">left</button>
+  <button type="button" id="rightBtn">right</button>
+</body>
+
 </html>

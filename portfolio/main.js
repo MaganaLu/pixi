@@ -16,6 +16,8 @@ let world;
 let charMoveDirection;
 let building;
 let charCollision;
+let modal;
+
 
 window.onload = async function () {
 
@@ -45,7 +47,6 @@ window.onload = async function () {
 
     //init tilemap for game map  
     await initMap();
-
 
 
     //add world sprites
@@ -104,12 +105,41 @@ window.onload = async function () {
 
     });
     */
-
+    //init modals
+    initModals();
   })()
+}
 
+function initModals() {
+  // Get the modal
+  modal = document.getElementById("myModal");
 
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal 
+  btn.onclick = function () {
+    modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
 
 }
+
+////////
 
 async function inputsMap(params) {
   let upBtn = document.getElementById("upBtn");
@@ -195,8 +225,8 @@ async function inputsMap(params) {
   rightBtn.addEventListener('mousedown', () => {
     let interval = setInterval(() => {
       if (character.x < world.width) {
-      keys['68'] = true;
-      charMoveDirection = "right";
+        keys['68'] = true;
+        charMoveDirection = "right";
       }
     }, 1);
     rightBtn.addEventListener('mouseup', () => {
@@ -251,7 +281,7 @@ async function initSprites() {
   world.addChild(character);
 
   //delete
-  console.log(character.bounds)
+  //console.log(character.bounds)
 
   //buildings 
   const texture = await PIXI.Assets.load('buildings/building_1.png');
@@ -268,7 +298,7 @@ async function initSprites() {
 
 
   world.addChild(building);
-  console.log("building: ", building.bounds)
+  //console.log("building: ", building.bounds)
 }
 
 //let keysDiv = document.querySelector("#keys");
@@ -285,7 +315,7 @@ function moveTo(character, newX, newY) {
   const dy = newY;
   time = Math.sqrt(dx * dx + dy * dy);
 
-  calculateDirection(newX, newY);d
+  calculateDirection(newX, newY); d
 
   //start character animation 
   character.play();
@@ -301,17 +331,17 @@ function boxesIntersect(a, b) {
   var ab = a.getBounds();
   var bb = b.getBounds();
 
-  if(ab.x + ab.width > bb.x){
+  if (ab.x + ab.width > bb.x) {
     console.log("ab.x + ab.width > bb.x", ab.x + ab.width > bb.x)
   }
   //player x coordinate is less than the
-  if(ab.x < bb.x + bb.width){
+  if (ab.x < bb.x + bb.width) {
     console.log("ab.x < bb.x + bb.width", ab.x < bb.x + bb.width)
   }
-  if(ab.y + ab.height > bb.y){
+  if (ab.y + ab.height > bb.y) {
     console.log("ab.y + ab.height > bb.y", ab.y + ab.height > bb.y)
   }
-  if(ab.y < bb.y + bb.height){
+  if (ab.y < bb.y + bb.height) {
     console.log("ab.y < bb.y + bb.height", ab.y < bb.y + bb.height)
   }
   //console.log("ab.x + ab.width > bb.x: ",ab.x + ab.width > bb.x)
@@ -323,11 +353,11 @@ function boxesIntersect(a, b) {
 
 // return true if the 2 rectangles are colliding
 
-function RectsColliding(obj1,obj2){
+function RectsColliding(obj1, obj2) {
   return !(obj1.x > obj2.x + obj2.width || obj1.x + obj1.width < obj2.x || obj1.y > obj2.y + obj2.height || obj1.y + obj1.height < obj2.y);
 }
 
-function HandleCollision(){
+function HandleCollision() {
   //charCollision = RectsColliding(character, building);
   if (RectsColliding(character, building)) {
     var characterHalfW = character.width / 2
@@ -360,28 +390,29 @@ function HandleCollision(){
       if (Math.abs(depthX) < Math.abs(depthY)) {
         // Collision along the X axis. React accordingly
         if (depthX > 0) {
-          console.log("left side collision");
+          //console.log("left side collision");
           character.x = character.x + pushBackDist;
         } else {
-          console.log("right side collision");
+          //console.log("right side collision");
           character.x = character.x - pushBackDist;
         }
       } else {
         // Collision along the Y axis.
         if (depthY > 0) {
-          console.log("top side collision");
+          //console.log("top side collision");
+          modal.style.display = "block";
           character.y = character.y + pushBackDist;
         } else {
-          console.log("bottom side collision");
+          //console.log("bottom side collision");
           character.y = character.y - pushBackDist;
         }
       }
     }
     // open modal here
   } else {
-    console.log("No collision");
+    //console.log("No collision");
   }
-  console.log("charCollision: ",charCollision)
+  //console.log("charCollision: ", charCollision)
 }
 
 // calculate direction and update textures
