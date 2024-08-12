@@ -18,6 +18,7 @@ canvas {
 border: #000;
 border-style: solid;
 border-radius: 20px;
+border-width: 4px;
 }
 
 button {
