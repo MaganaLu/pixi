@@ -11,7 +11,13 @@ body {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  background-color: #000;
+  background-color: #494786;
+}
+
+canvas {
+border: #000;
+border-style: solid;
+border-radius: 20px;
 }
 
 button {
@@ -19,6 +25,65 @@ button {
   cursor:
     pointer;
 }
+.buttons {
+  border: 6px solid var(--stroke);
+  padding: 8px 3px;
+  background-color: var(--darkGray);
+  border-radius: 100px;
+  float: right;
+  position: relative;
+  transform: rotate(-20deg);
+  top: 30px;
+ }
+ .buttons button {
+  background-color: var(--gray);
+  border: 6px solid var(--stroke);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  box-shadow: inset 4px 0 rgba(255,255,255,0.7), inset -4px 0 rgba(0,0,0,0.2) ;
+  margin: 0 5px;
+ }
+ .start-reset  {
+  list-style: none;
+  text-align: center;
+  width: 100%;
+  float: left;
+ }
+ .start-reset li {
+  display: inline-block;
+  margin: 0 15px;
+  
+ }
+ .start-reset li button {
+  border: 6px solid var(--stroke);
+  background-color:var(--light-brow);
+  width: 20px;
+  height: 50px;
+  padding: 0;
+  border-radius: 10px;
+  box-shadow: inset 3px 0 #fff, 3px 0 rgba(0,0,0,0.2);
+  transform: rotate(60deg);
+  position: relative;
+  left: -25px;
+  top: -10px;
+ }
+ .points {
+  text-align: center;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+ }
+ .points span {
+  font-size: 25px;
+  line-height: 0px;
+  letter-spacing: 3px;
+  margin-top: -3px;
+  display: block;
+  color: var(--stroke);
+  
+ }
 
 button:focus {
   box-shadow: inset 0 0 !important;
@@ -28,11 +93,12 @@ button:focus {
 :root {
   --pink: #FAD1D9;
   --blue: #C5F6FF;
-  --stroke: #522438;
+  --stroke: #a1a1a1;
   --green: #C2E688;
-  --red: #FC6963;
-  --light-brow: #846662;
-  --gray: #9EA1AF;
+  --gray: #d9d9d9;
+  --light-brow: #a1a1a1;
+  --purple: #8208b3;
+  --darkGray: #504f4f;
 }
 
 .actions {
@@ -41,11 +107,8 @@ button:focus {
 }
 
 .directions {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 6px solid var(--stroke);
-  background-color: var(--gray);
+  width: 40vw;
+  height: 20vh;
   position: relative;
   display: flex;
   float: left;
@@ -53,9 +116,7 @@ button:focus {
 
 .directions button {
   border: 6px solid var(--stroke);
-  background-color: var(--light-brow);
-  width: 30px;
-  height: 30px;
+  background-color: var(--gray);;
   position: absolute;
   z-index: 9;
 }
@@ -64,33 +125,39 @@ button:focus {
   border-right: none !important;
   box-shadow: inset 0 4px #fff, inset 0 -4px rgba(0, 0, 0, 0.2);
   top: 50%;
-  margin-top: -15px;
-  left: 13.5px;
+  width: 40%;
+  height: 20%;
+  left: 0;
 }
 
 .arrow-top {
   border-bottom: none !important;
   box-shadow: inset 0 4px #fff;
-  left: 50%;
-  margin-left: -15px;
-  top: 13.5px;
+  left: 45%;
+  width: 20%;
+  height: 40%;
+  top: 0;
 }
 
 .arrow-right {
   border-left: none !important;
   box-shadow: inset 0 4px #fff, inset 0 -4px rgba(0, 0, 0, 0.2);
   top: 50%;
-  margin-top: -15px;
-  right: 13.5px;
+  width: 40%;
+  height: 20%;
+  right: 0;
 }
 
 .arrow-bottom {
   border-top: none !important;
   box-shadow: inset 0 -4px rgba(0, 0, 0, 0.2);
   left: 50%;
-  margin-left: -15px;
-  bottom: 13.5px;
+  width: 10%;
+  height: 40%;
+  bottom: 0;
 }
+
+
 
 /* The Modal (background) */
 .modal {
@@ -104,27 +171,37 @@ button:focus {
   top: 0;
   width: 100%;
   /* Full width */
-  height: 100%;
+  height: 50%;
   /* Full height */
-  overflow: auto;
+  overflow: hidden;
   /* Enable scroll if needed */
   background-color: rgb(0, 0, 0);
   /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(255, 255, 255, 0);
   /* Black w/ opacity */
   -webkit-animation-name: fadeIn;
   /* Fade in the background */
   -webkit-animation-duration: 0.4s;
   animation-name: fadeIn;
-  animation-duration: 0.4s
+  animation-duration: 0.4s;
+
+  position: absolute;
+  top: 50%;
+  left: 53%;
+  width: 90vw;
+  height: 10vh;
+  margin-left: -50vw;
+  margin-top: -150px;
+
+
 }
 
 /* Modal Content */
 .modal-content {
   position: fixed;
-  bottom: 0;
+  top: 10vh;
   background-color: #fefefe;
-  width: 100%;
+  width: 90%;
   -webkit-animation-name: slideIn;
   -webkit-animation-duration: 0.4s;
   animation-name: slideIn;
@@ -162,47 +239,3 @@ button:focus {
   color: white;
 }
 
-/* Add Animation */
-@-webkit-keyframes slideIn {
-  from {
-    bottom: -300px;
-    opacity: 0
-  }
-
-  to {
-    bottom: 0;
-    opacity: 1
-  }
-}
-
-@keyframes slideIn {
-  from {
-    bottom: -300px;
-    opacity: 0
-  }
-
-  to {
-    bottom: 0;
-    opacity: 1
-  }
-}
-
-@-webkit-keyframes fadeIn {
-  from {
-    opacity: 0
-  }
-
-  to {
-    opacity: 1
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0
-  }
-
-  to {
-    opacity: 1
-  }
-}

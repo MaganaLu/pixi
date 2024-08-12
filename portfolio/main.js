@@ -2,8 +2,8 @@ import * as PIXI from 'pixi.js';
 import { CompositeTilemap } from '@pixi/tilemap';
 //import {Tween} from '@tweenjs/tween.js'
 
-let w = window.innerWidth - 10;
-let h = window.innerHeight - 100;
+let w = (window.innerWidth - 10);
+let h = (window.innerHeight - 100)/2;
 
 
 let app;
@@ -44,8 +44,8 @@ window.onload = async function () {
     world = new PIXI.Container();
     world.height = 4000;
     world.width = 4000;
-    world.x = window.innerWidth / 2;
-    world.y = window.innerHeight / 2;
+    world.x = w / 2;
+    world.y = h / 2;
     world.pivot.x = world.width / 2;
     world.pivot.y = world.height / 2;
 
@@ -123,17 +123,25 @@ function initModals() {
   var btn = document.getElementById("myBtn");
 
   // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
+  var close = document.getElementById("closeBtn");
 
   // When the user clicks the button, open the modal 
-  btn.onclick = function () {
-    modal.style.display = "block";
-  }
 
   // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
+  close.onclick = function () {
     modal.style.display = "none";
   }
+
+  close.addEventListener("touchstart", (e) => {
+    modal.style.display = "none";
+    console.log("here");
+  });
+  
+  close.addEventListener('touchend', function(e){
+    modal.style.display = "none";
+    console.log("here");
+  }, false);
+
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
