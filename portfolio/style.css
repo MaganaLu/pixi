@@ -23,8 +23,7 @@ border-width: 4px;
 
 button {
   outline: 0 !important;
-  cursor:
-    pointer;
+  cursor: pointer;
 }
 .buttons {
   border: 6px solid var(--stroke);
@@ -104,57 +103,59 @@ button:focus {
 
 .actions {
   /*  display: flex; */
-  padding: 30px 14px 0;
+  padding: 10px;
+  background-color: #C2E688;
 }
 
 .directions {
-  width: 40vw;
-  height: 20vh;
+  width: 50%;
+  aspect-ratio: 1/1;
   position: relative;
   display: flex;
-  float: left;
+  background-color: #547201;
 }
 
 .directions button {
   border: 6px solid var(--stroke);
   background-color: var(--gray);;
-  position: absolute;
+  width: 50%;
   z-index: 9;
+  
 }
 
 .arrow-left {
   border-right: none !important;
   box-shadow: inset 0 4px #fff, inset 0 -4px rgba(0, 0, 0, 0.2);
   top: 50%;
-  width: 40%;
-  height: 20%;
-  left: 0;
+  width: 50px;
+  height: 50px;
+  left: 50%;
 }
 
 .arrow-top {
   border-bottom: none !important;
   box-shadow: inset 0 4px #fff;
-  left: 45%;
-  width: 20%;
-  height: 40%;
-  top: 0;
+  left: 75px;
+  width: 50px;
+  height: 50px;
+  top: 0px;
 }
 
 .arrow-right {
   border-left: none !important;
   box-shadow: inset 0 4px #fff, inset 0 -4px rgba(0, 0, 0, 0.2);
-  top: 50%;
-  width: 40%;
-  height: 20%;
-  right: 0;
+  top: 75px;
+  width: 50px;
+  height: 50px;
+  right: 0em;
 }
 
 .arrow-bottom {
   border-top: none !important;
   box-shadow: inset 0 -4px rgba(0, 0, 0, 0.2);
-  left: 50%;
-  width: 10%;
-  height: 40%;
+  left: 75px;
+  width: 50px;
+  height: 50px;
   bottom: 0;
 }
 
