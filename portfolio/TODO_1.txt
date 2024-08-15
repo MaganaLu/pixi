@@ -1,18 +1,37 @@
 to do : 
 
-[X] add colision data to sprites?  donezo 
-    [X] see what edge sprite runs into 
-    [X] return sprite by X number of pixels 
+[] add art for actual "game"
+    [] add sprites to edges so player cannot cross 
+    [] add paths 
+    [] add buildings with different sprites to symbolize projects / data about me
+        [] linkedIn: corporate building
+        [] Github: construction uidling
+        [] Safilog: farm building 
+        [] Taqueria El trasco: mexican restaurant
+        [] Games I play: arcade building
+        [] Music I like: Concert building
+        [] More MAYBE??
+    [] add trees 
 
-[] add sprites to edges so player cannot cross 
-[] 
+[] add top instructions that show what the controls are and explains its a resume in game form 
 
-[] add top is gonna have a scene with striuctions that show what the controls are and explaiusn its a resume with art 
+[] link to portfolio in plain format
+    [] when pressing start button on mobile 
+    [] on bottom of desktop screen mode
 
-[] botton will have a navigation bar with link to resume in plain format 
-[] setting button 
+
+[] settings button
+    [] mapped to reset button on mobile
+    [] on bottom bar on desktop
+
 [] mute button
+    [] attached to reset button on mobile
+    [] attached to setting button on desktop 
+
 [] tiitle screen / my name
+    [] first thing that pops up when opening up site 
+
+
 
  
 
