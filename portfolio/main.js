@@ -487,7 +487,7 @@ function keysup(e) {
 }
 
 function gameloop() {
-  keysDiv.innerHTML = JSON.stringify(keys);
+  //keysDiv.innerHTML = JSON.stringify(keys);
   //console.log(character.playing)
 
   // test 
