@@ -4,6 +4,10 @@ import { CompositeTilemap } from '@pixi/tilemap';
 
 let w = (window.innerWidth - 10);
 let h = (window.innerHeight - 100)/2;
+if(window.innerWidth > 768){
+ h = window.innerHeight;
+}
+
 
 
 let app;
@@ -221,6 +225,16 @@ async function inputsMap(params) {
     });
   });
 
+  let buttonA = document.getElementById("aBtn");
+  
+
+  let buttonB = document.getElementById("bBtn");
+  buttonB.addEventListener('touchend', closeModal)
+
+}
+
+function closeModal(){
+  modal.style.display = "none";
 }
 
 async function initMap() {
@@ -476,7 +490,7 @@ function movementCompleted() {
 function keysdown(e) {
   var keyCode = (window.event) ? e.which : e.keyCode;
   keys[keyCode] = true;
-  //character.play();
+  console.log(keyCode);
 }
 
 function keysup(e) {
@@ -494,6 +508,11 @@ function gameloop() {
   //charCollision = boxesIntersect(character, building);
   //charCollision = RectsColliding(character, building);
   HandleCollision();
+
+  //close modal with escape key
+  if(keys['27']){
+    modal.style.display = "none";
+  }
 
   //text
   //check keyboard key press input to assign charMoveDirection
