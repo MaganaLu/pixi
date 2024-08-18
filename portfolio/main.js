@@ -22,6 +22,7 @@ let building;
 let charCollision;
 let modal;
 let modalBody;
+let mapSize = 1000;
 
 
 window.onload = async function () {
@@ -31,9 +32,10 @@ window.onload = async function () {
   (async () => {
     await app.init({
       // application options
-      width: w, height: h, backgroundColor: 0xffffff
+      width: w, height: h, backgroundColor: 0x9bd4c3
     });
 
+    const ctx = app.canvas.getContext('2d');
     // can intercat with screen events 
     app.stage.hitArea = app.screen;
     app.stage.interactive = true;
@@ -46,8 +48,8 @@ window.onload = async function () {
 
 
     world = new PIXI.Container();
-    world.height = 4000;
-    world.width = 4000;
+    world.height = mapSize;
+    world.width = mapSize;
     world.x = w / 2;
     world.y = h / 2;
     world.pivot.x = world.width / 2;
@@ -238,15 +240,47 @@ function closeModal(){
 }
 
 async function initMap() {
-  await PIXI.Assets.load(['buildings.json']).then(() => {
-    const tilemap = new CompositeTilemap();
+  // size sprite 
+  let scaleX = 2;
+  let scaleY = 2;
+  let TileSpriteSize = 16;
 
-    // Render your first tile at (0, 0)!
-    tilemap.tile('building_3.png', 0, 0);
+  const tilemap = new CompositeTilemap();
+
+  const texture = await PIXI.Assets.load('GreenTile.png');
+  let GreenMap = new PIXI.Sprite(texture);
+  // Setup the position of the building
+  GreenMap.x = 0;
+  GreenMap.y = 0;
+
+  world.addChild(GreenMap);
+
+ /* await PIXI.Assets.load(['CliffTiles.json']).then(() => {
+    
+    
+    // 4 is all green 
+  
+
+    //rows
+    for(let i = 0 ; i < (mapSize/TileSpriteSize); i++){
+      //columns
+      
+        tilemap.tile('CliffTile-4.png', i, 0);
+      
+    }
+    
+
+    tilemap.scale.set(scaleX, scaleY);
 
     world.addChild(tilemap);
   });
+  */
+
+
 }
+
+
+
 
 async function initSprites() {
 
@@ -267,12 +301,12 @@ async function initSprites() {
   character.scale.set(scaleX, scaleY);
 
   // configure + start animation:
-  character.animationSpeed = 1 / 12;                     // 6 fps
+  character.animationSpeed = 1 / 10;                     // 6 fps
   //character.position.set(150, 100); // almost bottom-left corner of the canvas
   //app.stage.children[0].textures = PIXI.textures.from("map.jpg");
   //tmp
 
-  // Setup the position of the bunny
+  // Setup the position of the player
   character.x = world.width / 2;
   character.y = world.height / 2;
 
@@ -500,9 +534,31 @@ function keysup(e) {
   character.stop();
 }
 
+function checkOutOfBounds(){
+  console.log(character.x);
+  if(character.x > mapSize ){
+      character.x =  mapSize;
+  }
+  if(character.y > mapSize ){
+    character.y =  mapSize;
+  }
+  if(character.y < 0 ){
+    character.y =  0;
+  }
+  if(character.x < 0){
+    character.x = 0;
+  }
+
+  console.log(character.x);
+}
+
 function gameloop() {
   //keysDiv.innerHTML = JSON.stringify(keys);
   //console.log(character.playing)
+
+  checkOutOfBounds();
+
+ 
 
   // test 
   //charCollision = boxesIntersect(character, building);
