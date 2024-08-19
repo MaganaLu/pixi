@@ -23,7 +23,7 @@ let charCollision;
 let modal;
 let modalBody;
 let mapHeight = 1000;
-let mapWidth = 1500;
+let mapWidth = 1450;
 let arcade;
 let stage;
 let restaurant;
@@ -338,7 +338,7 @@ async function initSprites() {
 
   // Setup the position of the building
   arcade.x = 600;
-  arcade.y = 100;
+  arcade.y = 680;
 
   arcade.scale.set(scaleX, scaleY);
 
@@ -385,7 +385,7 @@ async function initSprites() {
   github = new PIXI.Sprite(githubTexture);
 
   // Setup the position of the building
-  github.x = 800;
+  github.x = 600;
   github.y = 300;
 
   github.scale.set(scaleX, scaleY);
