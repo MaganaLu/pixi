@@ -23,7 +23,7 @@ let charCollision;
 let modal;
 let modalBody;
 let mapHeight = 1000;
-let mapWidth = 1450;
+let mapWidth = 1350;
 let arcade;
 let stage;
 let restaurant;
