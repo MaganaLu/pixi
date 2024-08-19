@@ -22,7 +22,13 @@ let building;
 let charCollision;
 let modal;
 let modalBody;
-let mapSize = 1000;
+let mapHeight = 1000;
+let mapWidth = 1500;
+let arcade;
+let stage;
+let restaurant;
+let office;
+let github;
 
 
 window.onload = async function () {
@@ -35,7 +41,6 @@ window.onload = async function () {
       width: w, height: h, backgroundColor: 0x9bd4c3
     });
 
-    const ctx = app.canvas.getContext('2d');
     // can intercat with screen events 
     app.stage.hitArea = app.screen;
     app.stage.interactive = true;
@@ -48,8 +53,8 @@ window.onload = async function () {
 
 
     world = new PIXI.Container();
-    world.height = mapSize;
-    world.width = mapSize;
+    world.height = mapHeight;
+    world.width = mapWidth;
     world.x = w / 2;
     world.y = h / 2;
     world.pivot.x = world.width / 2;
@@ -316,21 +321,83 @@ async function initSprites() {
   //console.log(character.bounds)
 
   //buildings 
-  const texture = await PIXI.Assets.load('buildings/building_1.png');
-  building = new PIXI.Sprite(texture);
+  const farmTexture = await PIXI.Assets.load('AllBuildings/Building-5.png');
+  building = new PIXI.Sprite(farmTexture);
 
   // Setup the position of the building
   building.x = 200;
   building.y = 0;
 
-  // size sprite 
-  var scaleX = 1;
-  var scaleY = 1;
   building.scale.set(scaleX, scaleY);
 
 
   world.addChild(building);
+
+  const arcadeTexture = await PIXI.Assets.load('AllBuildings/Building-0.png');
+  arcade = new PIXI.Sprite(arcadeTexture);
+
+  // Setup the position of the building
+  arcade.x = 600;
+  arcade.y = 100;
+
+  arcade.scale.set(scaleX, scaleY);
+
+
+  world.addChild(arcade);
+
+  const stageTexture = await PIXI.Assets.load('AllBuildings/Building-1.png');
+  stage = new PIXI.Sprite(stageTexture);
+
+  // Setup the position of the building
+  stage.x = 950;
+  stage.y = 0;
+
+  stage.scale.set(scaleX, scaleY);
+
+
+  world.addChild(stage);
+
+  const restaurantTexture = await PIXI.Assets.load('AllBuildings/Building-2.png');
+  restaurant = new PIXI.Sprite(restaurantTexture);
+
+  // Setup the position of the building
+  restaurant.x = 1000;
+  restaurant.y = 300;
+
+  restaurant.scale.set(scaleX, scaleY);
+
+
+  world.addChild(restaurant);
+
+  const officeTexture = await PIXI.Assets.load('AllBuildings/Building-3.png');
+  office = new PIXI.Sprite(officeTexture);
+
+  // Setup the position of the building
+  office.x = 250;
+  office.y = 650;
+
+  office.scale.set(scaleX, scaleY);
+
+
+  world.addChild(office);
+  
+  const githubTexture = await PIXI.Assets.load('AllBuildings/Building-4.png');
+  github = new PIXI.Sprite(githubTexture);
+
+  // Setup the position of the building
+  github.x = 800;
+  github.y = 300;
+
+  github.scale.set(scaleX, scaleY);
+
+
+  world.addChild(github);
+
   //console.log("building: ", building.bounds)
+}
+
+function addSpriteAsset(texture){
+
 }
 
 //let keysDiv = document.querySelector("#keys");
@@ -389,7 +456,7 @@ function RectsColliding(obj1, obj2) {
   return !(obj1.x > obj2.x + obj2.width || obj1.x + obj1.width < obj2.x || obj1.y > obj2.y + obj2.height || obj1.y + obj1.height < obj2.y);
 }
 
-function HandleCollision() {
+function HandleCollision(character, building, modalText) {
   //charCollision = RectsColliding(character, building);
   if (RectsColliding(character, building)) {
     var characterHalfW = character.width / 2
@@ -440,8 +507,9 @@ function HandleCollision() {
 
 
           //console.log("top side collision");
-          //modalBody.innerText = "wowza";
+          modalBody.innerText = modalText;
           modal.style.display = "block";
+          modalText = 
           character.y = character.y + pushBackDist;
           console.log("in here keys 87 is", keys['87']);
 
@@ -536,11 +604,11 @@ function keysup(e) {
 
 function checkOutOfBounds(){
   console.log(character.x);
-  if(character.x > mapSize ){
-      character.x =  mapSize;
+  if(character.x > mapWidth ){
+      character.x =  mapWidth;
   }
-  if(character.y > mapSize ){
-    character.y =  mapSize;
+  if(character.y > mapHeight ){
+    character.y =  mapHeight;
   }
   if(character.y < 0 ){
     character.y =  0;
@@ -563,7 +631,12 @@ function gameloop() {
   // test 
   //charCollision = boxesIntersect(character, building);
   //charCollision = RectsColliding(character, building);
-  HandleCollision();
+  HandleCollision(character, building, "Safilog");
+  HandleCollision(character, arcade, "arcade");
+  HandleCollision(character, stage, "stage");
+  HandleCollision(character, restaurant, "restaurant");
+  HandleCollision(character, github, "github");
+  HandleCollision(character, office, "LinkedIn");
 
   //close modal with escape key
   if(keys['27']){
@@ -623,7 +696,7 @@ function gameloop() {
       character.x -= 1;
     }
     //walk down 83
-    if ((charMoveDirection == "down" || keys["83"]) && character.y < window.innerHeight - 36) {
+    if ((charMoveDirection == "down" || keys["83"]) && character.y < mapHeight - 36) {
       if (character.textures != characterMovement["walk_down"].textures) {
         character.textures = characterMovement["walk_down"].textures;
       }
@@ -632,7 +705,7 @@ function gameloop() {
 
     }
     //walk right 68
-    if ((charMoveDirection == "right" || keys["68"]) && character.x < window.innerWidth - 64) {
+    if ((charMoveDirection == "right" || keys["68"]) && character.x < mapWidth - 64) {
       if (character.textures != characterMovement["walk_right"].textures) {
         character.textures = characterMovement["walk_right"].textures;
       }
