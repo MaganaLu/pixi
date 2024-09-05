@@ -2,15 +2,15 @@ to do :
 
 [] add art for actual "game"
     [] add sprites to edges so player cannot cross 
-    [] add paths 
-    [] add buildings with different sprites to symbolize projects / data about me
-        [] linkedIn: corporate building
-        [] Github: construction uidling
-        [] Safilog: farm building 
-        [] Taqueria El trasco: mexican restaurant
-        [] Games I play: arcade building
-        [] Music I like: Concert building
-        [] More MAYBE??
+    [X] add paths 
+    [X] add buildings with different sprites to symbolize projects / data about me
+        [X] linkedIn: corporate building
+        [X] Github: construction uidling
+        [X] Safilog: farm building 
+        [X] Taqueria El trasco: mexican restaurant
+        [X] Games I play: arcade building
+        [X] Music I like: Concert building
+        [X] More MAYBE??
     [] add trees 
 
 [] add top instructions that show what the controls are and explains its a resume in game form 

@@ -37,8 +37,8 @@ window.onload = async function () {
 
   (async () => {
     await app.init({
-      // application options
-      width: w, height: h, backgroundColor: 0x9bd4c3
+      // application optionss
+      width: w, height: h, backgroundColor: 0xccae73
     });
 
     // can intercat with screen events 
@@ -252,13 +252,13 @@ async function initMap() {
 
   const tilemap = new CompositeTilemap();
 
-  const texture = await PIXI.Assets.load('GreenTile.png');
-  let GreenMap = new PIXI.Sprite(texture);
+  const texture = await PIXI.Assets.load('WesternMap.png');
+  let baseMap = new PIXI.Sprite(texture);
   // Setup the position of the building
-  GreenMap.x = 0;
-  GreenMap.y = 0;
+  baseMap.x = 0;
+  baseMap.y = 0;
 
-  world.addChild(GreenMap);
+  world.addChild(baseMap);
 
  /* await PIXI.Assets.load(['CliffTiles.json']).then(() => {
     
@@ -301,8 +301,8 @@ async function initSprites() {
   character = PIXI.AnimatedSprite.fromFrames(animations["walk_down/walk_down"]);
 
   // size sprite 
-  var scaleX = 2;
-  var scaleY = 2;
+  var scaleX = 1;
+  var scaleY = 1;
   character.scale.set(scaleX, scaleY);
 
   // configure + start animation:
@@ -321,7 +321,7 @@ async function initSprites() {
   //console.log(character.bounds)
 
   //buildings 
-  const farmTexture = await PIXI.Assets.load('AllBuildings/Building-5.png');
+  const farmTexture = await PIXI.Assets.load('Western_Buildings/Western_Buildings-4.png');
   building = new PIXI.Sprite(farmTexture);
 
   // Setup the position of the building
@@ -333,7 +333,7 @@ async function initSprites() {
 
   world.addChild(building);
 
-  const arcadeTexture = await PIXI.Assets.load('AllBuildings/Building-0.png');
+  const arcadeTexture = await PIXI.Assets.load('Western_Buildings/Western_Buildings-5.png');
   arcade = new PIXI.Sprite(arcadeTexture);
 
   // Setup the position of the building
@@ -345,7 +345,7 @@ async function initSprites() {
 
   world.addChild(arcade);
 
-  const stageTexture = await PIXI.Assets.load('AllBuildings/Building-1.png');
+  const stageTexture = await PIXI.Assets.load('Western_Buildings/Western_Buildings-3.png');
   stage = new PIXI.Sprite(stageTexture);
 
   // Setup the position of the building
@@ -357,7 +357,7 @@ async function initSprites() {
 
   world.addChild(stage);
 
-  const restaurantTexture = await PIXI.Assets.load('AllBuildings/Building-2.png');
+  const restaurantTexture = await PIXI.Assets.load('Western_Buildings/Western_Buildings-2.png');
   restaurant = new PIXI.Sprite(restaurantTexture);
 
   // Setup the position of the building
@@ -369,7 +369,7 @@ async function initSprites() {
 
   world.addChild(restaurant);
 
-  const officeTexture = await PIXI.Assets.load('AllBuildings/Building-3.png');
+  const officeTexture = await PIXI.Assets.load('Western_Buildings/Western_Buildings-1.png');
   office = new PIXI.Sprite(officeTexture);
 
   // Setup the position of the building
@@ -381,7 +381,7 @@ async function initSprites() {
 
   world.addChild(office);
   
-  const githubTexture = await PIXI.Assets.load('AllBuildings/Building-4.png');
+  const githubTexture = await PIXI.Assets.load('Western_Buildings/Western_Buildings-0.png');
   github = new PIXI.Sprite(githubTexture);
 
   // Setup the position of the building

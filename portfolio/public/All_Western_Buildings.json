@@ -1,0 +1,63 @@
+{"frames": {
+
+"Western_Buildings-0.png":
+{
+	"frame": {"x":99,"y":304,"w":110,"h":121},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":110,"h":121},
+	"sourceSize": {"w":110,"h":121}
+},
+"Western_Buildings-1.png":
+{
+	"frame": {"x":1,"y":304,"w":96,"h":144},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":144},
+	"sourceSize": {"w":96,"h":144}
+},
+"Western_Buildings-2.png":
+{
+	"frame": {"x":1,"y":450,"w":96,"h":121},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":121},
+	"sourceSize": {"w":96,"h":121}
+},
+"Western_Buildings-3.png":
+{
+	"frame": {"x":1,"y":153,"w":200,"h":149},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":149},
+	"sourceSize": {"w":200,"h":149}
+},
+"Western_Buildings-4.png":
+{
+	"frame": {"x":1,"y":1,"w":207,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":207,"h":150},
+	"sourceSize": {"w":207,"h":150}
+},
+"Western_Buildings-5.png":
+{
+	"frame": {"x":99,"y":427,"w":96,"h":121},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":121},
+	"sourceSize": {"w":96,"h":121}
+}},
+"animations": {
+	"Western_Buildings": ["Western_Buildings-0.png","Western_Buildings-1.png","Western_Buildings-2.png","Western_Buildings-3.png","Western_Buildings-4.png","Western_Buildings-5.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "All_Western_Buildings.png",
+	"format": "RGBA8888",
+	"size": {"w":210,"h":572},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:dd3e42cbf1329ecf27f4555d301e9d05:d48b85beb76e993be3815693d432efdb:839869cc06b8d4f2588eeea195c119c1$"
+}
+}
