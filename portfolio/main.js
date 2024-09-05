@@ -337,8 +337,8 @@ async function initSprites() {
   arcade = new PIXI.Sprite(arcadeTexture);
 
   // Setup the position of the building
-  arcade.x = 600;
-  arcade.y = 680;
+  arcade.x = 850;
+  arcade.y = 322;
 
   arcade.scale.set(scaleX, scaleY);
 
@@ -361,8 +361,8 @@ async function initSprites() {
   restaurant = new PIXI.Sprite(restaurantTexture);
 
   // Setup the position of the building
-  restaurant.x = 1000;
-  restaurant.y = 300;
+  restaurant.x = 850;
+  restaurant.y = 17;
 
   restaurant.scale.set(scaleX, scaleY);
 
@@ -373,8 +373,8 @@ async function initSprites() {
   office = new PIXI.Sprite(officeTexture);
 
   // Setup the position of the building
-  office.x = 250;
-  office.y = 650;
+  office.x = 200;
+  office.y = 300;
 
   office.scale.set(scaleX, scaleY);
 
@@ -385,8 +385,8 @@ async function initSprites() {
   github = new PIXI.Sprite(githubTexture);
 
   // Setup the position of the building
-  github.x = 600;
-  github.y = 300;
+  github.x = 300;
+  github.y = 322;
 
   github.scale.set(scaleX, scaleY);
 
@@ -505,14 +505,13 @@ function HandleCollision(character, building, modalText) {
 
           //stop movement 
 
-
+          if(modalText != null){
           //console.log("top side collision");
           modalBody.innerText = modalText;
           modal.style.display = "block";
-          modalText = 
-          character.y = character.y + pushBackDist;
           console.log("in here keys 87 is", keys['87']);
-
+          }
+          character.y = character.y + pushBackDist;
         } else {
           //console.log("bottom side collision");
           character.y = character.y - pushBackDist;
