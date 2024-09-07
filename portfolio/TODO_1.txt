@@ -13,7 +13,7 @@ to do :
         [X] More MAYBE??
     [] add trees 
 
-[] add top instructions that show what the controls are and explains its a resume in game form 
+[X] add top instructions that show what the controls are and explains its a resume in game form 
 
 [] link to portfolio in plain format
     [] when pressing start button on mobile 

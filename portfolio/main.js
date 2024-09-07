@@ -20,6 +20,8 @@ let world;
 let charMoveDirection;
 let building;
 let charCollision;
+let introModal;
+let introModalBody;
 let modal;
 let modalBody;
 let mapHeight = 1000;
@@ -126,6 +128,40 @@ window.onload = async function () {
 }
 
 function initModals() {
+  //
+    // Get the modal
+    introModal = document.getElementById("introModal");
+    introModalBody = document.getElementById("introModalBody")
+  
+    // Get the <span> element that closes the modal
+    let introModalClose = document.getElementById("closeIntroModalBtn");
+  
+    // When the user clicks the button, open the modal 
+  
+    // When the user clicks on <span> (x), close the modal
+    introModalClose.onclick = function () {
+      introModal.style.display = "none";
+    }
+  
+    introModalClose.addEventListener("touchstart", (e) => {
+      introModal.style.display = "none";
+      console.log("here");
+    });
+    
+    introModalClose.addEventListener('touchend', function(e){
+      introModal.style.display = "none";
+      console.log("here");
+    }, false);
+  
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        introModal.style.display = "none";
+      }
+    }
+  //
+
   // Get the modal
   modal = document.getElementById("myModal");
   modalBody = document.getElementById("modalBody")
