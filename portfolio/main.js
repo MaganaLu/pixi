@@ -24,6 +24,8 @@ let introModal;
 let introModalBody;
 let modal;
 let modalBody;
+let modalHeader;
+let modalFooter;
 let mapHeight = 1000;
 let mapWidth = 1350;
 let arcade;
@@ -31,6 +33,9 @@ let stage;
 let restaurant;
 let office;
 let github;
+let cacti = {};
+let rocks = {};
+let trees = {};
 
 
 window.onload = async function () {
@@ -132,6 +137,7 @@ function initModals() {
     // Get the modal
     introModal = document.getElementById("introModal");
     introModalBody = document.getElementById("introModalBody")
+
   
     // Get the <span> element that closes the modal
     let introModalClose = document.getElementById("closeIntroModalBtn");
@@ -165,6 +171,8 @@ function initModals() {
   // Get the modal
   modal = document.getElementById("myModal");
   modalBody = document.getElementById("modalBody")
+  modalFooter = document.getElementById("modalFooter");
+  modalHeader = document.getElementById("modalHeader");
 
   // Get the button that opens the modal
   var btn = document.getElementById("myBtn");
@@ -374,7 +382,7 @@ async function initSprites() {
 
   // Setup the position of the building
   arcade.x = 850;
-  arcade.y = 322;
+  arcade.y = 300;
 
   arcade.scale.set(scaleX, scaleY);
 
@@ -398,7 +406,7 @@ async function initSprites() {
 
   // Setup the position of the building
   restaurant.x = 850;
-  restaurant.y = 17;
+  restaurant.y = 0;
 
   restaurant.scale.set(scaleX, scaleY);
 
@@ -428,6 +436,79 @@ async function initSprites() {
 
 
   world.addChild(github);
+
+  const cactiTexture = await PIXI.Assets.load('DecorSprites/DecorSprites-33.png');
+
+  for(let i =0; i < 5; i++){
+    cacti[i] = new PIXI.Sprite(cactiTexture);
+    cacti[i].scale.set(scaleX, scaleY);
+    world.addChild(cacti[i]);
+  }
+
+  const rockTexture = await PIXI.Assets.load('DecorSprites/DecorSprites-18.png');
+
+  for(let i =0; i < 5; i++){
+    rocks[i] = new PIXI.Sprite(rockTexture);
+    rocks[i].scale.set(scaleX, scaleY);
+    world.addChild(rocks[i]);
+  }
+
+  const treeTexture = await PIXI.Assets.load('DecorSprites/DecorSprites-0.png');
+
+  for(let i =0; i < 5; i++){
+    trees[i] = new PIXI.Sprite(treeTexture);
+    trees[i].scale.set(scaleX, scaleY);
+    world.addChild(trees[i]);
+  }
+
+  // Setup the position of the building
+  cacti[0].x = 1000;
+  cacti[0].y = 322;
+
+  cacti[1].x = 600;
+  cacti[1].y = 322;
+
+  cacti[2].x = 55;
+  cacti[2].y = 330;
+
+  cacti[3].x = 12;
+  cacti[3].y = 567;
+
+  cacti[4].x = 400;
+  cacti[4].y = 579;
+
+
+  rocks[0].x = 900;
+  rocks[0].y = 222;
+
+  rocks[1].x = 375;
+  rocks[1].y = 250;
+
+  rocks[2].x = 1055;
+  rocks[2].y = 212;
+
+  rocks[3].x = 820;
+  rocks[3].y = 517;
+
+  rocks[4].x = 100;
+  rocks[4].y = 179;
+
+
+  trees[0].x = 900;
+  trees[0].y = 222;
+
+  trees[1].x = 100;
+  trees[1].y = 500;
+
+  trees[2].x = 550;
+  trees[2].y = 320;
+
+  trees[3].x = 800;
+  trees[3].y = 600;
+
+  trees[4].x = 40;
+  trees[4].y = 30;
+
 
   //console.log("building: ", building.bounds)
 }
@@ -492,7 +573,7 @@ function RectsColliding(obj1, obj2) {
   return !(obj1.x > obj2.x + obj2.width || obj1.x + obj1.width < obj2.x || obj1.y > obj2.y + obj2.height || obj1.y + obj1.height < obj2.y);
 }
 
-function HandleCollision(character, building, modalText) {
+function HandleCollision(character, building, modalText, modalHeaderText, modalFooterText) {
   //charCollision = RectsColliding(character, building);
   if (RectsColliding(character, building)) {
     var characterHalfW = character.width / 2
@@ -544,6 +625,8 @@ function HandleCollision(character, building, modalText) {
           if(modalText != null){
           //console.log("top side collision");
           modalBody.innerText = modalText;
+          modalHeader.innerText = modalHeaderText;
+          modalFooter.innerText = modalFooterText;
           modal.style.display = "block";
           console.log("in here keys 87 is", keys['87']);
           }
@@ -666,12 +749,20 @@ function gameloop() {
   // test 
   //charCollision = boxesIntersect(character, building);
   //charCollision = RectsColliding(character, building);
-  HandleCollision(character, building, "Safilog");
-  HandleCollision(character, arcade, "arcade");
-  HandleCollision(character, stage, "stage");
-  HandleCollision(character, restaurant, "restaurant");
-  HandleCollision(character, github, "github");
-  HandleCollision(character, office, "LinkedIn");
+  HandleCollision(character, building, "Safilog", "safilog project with memes", "dddd");
+  HandleCollision(character, arcade, "arcade", "ddd", "222");
+  HandleCollision(character, stage, "stage", "d", "555");
+  HandleCollision(character, restaurant, "restaurant", "ddd", "444");
+  HandleCollision(character, github, "github", "dd", "55");
+  HandleCollision(character, office, "LinkedIn", "dd", "555");
+
+  for(let i = 0; i < 5; i++){
+    HandleCollision(character, rocks[i], null, null,null);
+    HandleCollision(character, cacti[i], null, null,null);
+    HandleCollision(character, trees[i], null, null,null);
+  }
+
+
 
   //close modal with escape key
   if(keys['27']){
